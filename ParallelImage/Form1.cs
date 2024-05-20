@@ -24,8 +24,6 @@ namespace ParallelImage
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
-
             openFileDialog1.ShowDialog();
             var file = openFileDialog1.FileName;
             if (file != null)
@@ -38,44 +36,35 @@ namespace ParallelImage
 
         private void button2_Click(object sender, EventArgs e)
         {
-
             var file_name = openFileDialog1.FileName;
 
             Parallel.Invoke(() => pictureBox2.Image = EdgeDetection(file_name),
                             () => pictureBox3.Image = Thresholding(file_name),
                             () => pictureBox4.Image = Negative(file_name),
                             () => pictureBox5.Image = Mirror(file_name));
-  
-        }
-
-        public Bitmap EdgeDetectionCV(string? file_name)
-        {
-            Bitmap? bmp = new Bitmap(file_name);
-            Mat mat = new Mat();
-            mat = bmp.ToMat();
-
-            Mat mat_canny = new Mat();
-            CvInvoke.Canny(mat, mat_canny, 100, 200);
-
-            return mat_canny.ToBitmap();
         }
 
         public Bitmap EdgeDetection(string? file_name)
         {
             Bitmap? bmp = new Bitmap(file_name);
-            
+            Mat mat = new Mat();
+            mat = bmp.ToMat();
+            Mat mat_canny = new Mat();
 
-            return bmp;
+            CvInvoke.Canny(mat, mat_canny, 100, 200);
+
+            return mat_canny.ToBitmap();
         }
 
+        
         public Bitmap Thresholding(string? file_name)
         {
             Bitmap? bmp = new Bitmap(file_name);
             Mat mat = new Mat();
             mat = bmp.ToMat();
-
-            
+            CvInvoke.CvtColor(mat, mat, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
             Mat thresholding_mat = new Mat();
+
             CvInvoke.Threshold(mat, thresholding_mat, 127, 255, Emgu.CV.CvEnum.ThresholdType.Binary);
 
             return thresholding_mat.ToBitmap();
