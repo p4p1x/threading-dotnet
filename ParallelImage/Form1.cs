@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
@@ -37,11 +37,23 @@ namespace ParallelImage
         private void button2_Click(object sender, EventArgs e)
         {
             var file_name = openFileDialog1.FileName;
-
-            Parallel.Invoke(() => pictureBox2.Image = EdgeDetection(file_name),
+            if (img == null)
+            {
+                MessageBox.Show("Załaduj zdjęcie przed przetworzeniem obrazu.","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+            try
+            {
+                Parallel.Invoke(() => pictureBox2.Image = EdgeDetection(file_name),
                             () => pictureBox3.Image = Thresholding(file_name),
                             () => pictureBox4.Image = Negative(file_name),
                             () => pictureBox5.Image = Mirror(file_name));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public Bitmap EdgeDetection(string? file_name)
