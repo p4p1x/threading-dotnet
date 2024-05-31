@@ -1,2 +1,2 @@
 # threading-dotnet
-Image processing and matrix multiplication using Parallel and Thread classes 
+Image processing and matrix multiplication app using Parallel and Thread classes 
